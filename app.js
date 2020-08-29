@@ -40,7 +40,7 @@ app.use('/auth/user', authUserRoutes);
 //   location:String
 // }
 
-app.get("/", (req,res) => { 
+app.get("/", (req, res) => { 
 	res.send('Hi There');
 });
 

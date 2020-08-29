@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
@@ -13,6 +12,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     name: {
         type: String,
         required: true
@@ -20,7 +23,7 @@ const UserSchema = new Schema({
     phoneNo: {
         type: String,
         required: true,
-        unique: true
+        // unique: true
     },
     medicalInfo: String,
     address: String
@@ -53,6 +56,11 @@ UserSchema.methods.comparePassword =  async function(passw, next) {
 };
 
 mongoose.model('User', UserSchema);
+
+// signup
+// login
+// logout
+// edit
 
 
 

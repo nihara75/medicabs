@@ -1,9 +1,6 @@
-
-
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-
 
 module.exports = function(passport) {
 
@@ -20,7 +17,7 @@ module.exports = function(passport) {
                     if(err) return done(err);
                     if(!isMatch) return done(null, false, { success: false, message: 'Invalid email or password' });
 
-                    return done(null, user);
+                    return done(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
                 });
             } catch(err) {
                 return done(err);
@@ -38,7 +35,7 @@ module.exports = function(passport) {
             const user = await User.findById(id);
             if(!user) return next(null, false);;
 
-            next(null, { id: user._id, admin: user.admin });
+            next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
         } catch(err) {
             next(err);
         }
