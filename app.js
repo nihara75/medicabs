@@ -1,21 +1,29 @@
 const express=require("express");
 const mongoose=require("mongoose");
+
+const keys = require('./config/keys');
+
+require('./models/User');
+
+mongoose.connect(keys.mongoURI, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useUnifiedTopology: true
+	})
+	.then(() => console.log("DATABASE: Connection to database successful!"))
+	.catch(err => console.log("DATABASE: " + err));
+
 const app = express();
 
-mongoose.connect("mongodb+srv://nihara:JrJGwZFofqaUip8P@cluster0.llxb8.mongodb.net/medicab-dev?retryWrites=true&w=majority", {useNewUrlParser: true,useUnifiedTopology:true});
-const loginSchema = {
-  name: String,
-  password: String,
-  post:String
-};
-
-const profileSchema={
-  name:String,
-  ph:String,
-  email:String,
-  medicalinfo:String,
-  address:String
-}
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(session({ 
+    secret: keys.sessionSecret, 
+    resave: false, saveUninitialized: false 
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 const medistoreSchema={
   name:String,
@@ -30,30 +38,14 @@ const medicineSchema={
   count:String
 }
 
-const Login = mongoose.model("login", loginSchema);
-const Profile=mongoose.model("profile",profileSchema);
-
-app.get("/",(req,res)=>{
-  res.render("/Landing");
+app.get("/", (req,res) => { 
+	console.log('Hi There!')
 });
 
 
+const PORT = process.env.PORT || 5000;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
+app.listen(PORT, (err) => {
+    if(err) console.log(err);
+    console.log(`Listening to port ${PORT}`);
 });
