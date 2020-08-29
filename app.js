@@ -4,10 +4,11 @@ const session = require('express-session');
 const passport = require('passport')
 const cookieParser = require('cookie-parser');
 
-const keys = require('./config/keys');
-
 require('./models/User');
 require('./models/Medicine');
+require('./services/passport');
+
+const keys = require('./config/keys');
 
 mongoose.connect(keys.mongoURI, {
 		useNewUrlParser: true,
