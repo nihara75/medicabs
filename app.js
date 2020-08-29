@@ -1,9 +1,13 @@
-const express=require("express");
-const mongoose=require("mongoose");
+const express = require("express");
+const mongoose = require("mongoose");
+const session = require('express-session');
+const passport = require('passport')
+const cookieParser = require('cookie-parser');
 
 const keys = require('./config/keys');
 
 require('./models/User');
+require('./models/Medicine');
 
 mongoose.connect(keys.mongoURI, {
 		useNewUrlParser: true,
@@ -25,21 +29,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const medistoreSchema={
-  name:String,
-  ph:String,
-  email:String,
-  location:String
-}
-
-const medicineSchema={
-  name:String,
-  dosage:String,
-  count:String
-}
+// const medistoreSchema={
+//   name:String,
+//   ph:String,
+//   email:String,
+//   location:String
+// }
 
 app.get("/", (req,res) => { 
-	console.log('Hi There!')
+	res.send('Hi There');
 });
 
 
