@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require('express-session');
-const passport = require('passport')
+const passport = require('passport');
 const cookieParser = require('cookie-parser');
 
 require('./models/User');
@@ -9,6 +9,7 @@ require('./models/Medicine');
 require('./services/passport');
 
 const keys = require('./config/keys');
+const authUserRoutes = require('./routes/authUserRoutes');
 
 mongoose.connect(keys.mongoURI, {
 		useNewUrlParser: true,
@@ -30,6 +31,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/auth/user', authUserRoutes);
+
 // const medistoreSchema={
 //   name:String,
 //   ph:String,
@@ -40,7 +43,6 @@ app.use(passport.session());
 app.get("/", (req,res) => { 
 	res.send('Hi There');
 });
-
 
 const PORT = process.env.PORT || 5000;
 
