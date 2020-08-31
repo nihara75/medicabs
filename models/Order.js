@@ -3,12 +3,12 @@ const { Schema } = mongoose;
 
 
 const orderSchema= new Schema({
-orderid:Integer,
-lalitude:Integer,
-longitude:Integer,
+orderid:Number,
+lalitude:Number,
+longitude:Number,
 place:String,
 storeid:{
-          type:Integer,
+          type:Number,
           required:true
                 },
 image:String ,        // prescription storing

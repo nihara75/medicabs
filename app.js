@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
 	res.send('Hi There');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, (err) => {
     if(err) console.log(err);

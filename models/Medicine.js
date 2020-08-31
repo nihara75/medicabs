@@ -13,4 +13,4 @@ const MedicineSchema = new Schema({
     count: String
 });
 
-mongoose.model('Medicice', MedicineSchema);
+mongoose.model('Medicine', MedicineSchema);

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Partner = require('mongoose').model('Partner');
 const multer = require('multer');
+const bodyparser = require('body-parser');
 
 router.get("/partner",(req,res)=>{
   Partner.find({},(err,details){

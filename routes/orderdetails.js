@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Order = require('mongoose').model('Order');
 const multer = require('multer');
+const bodyparser = require('body-parser');
 
 //Reference code.
 /*app.use(multer({ dest: "./uploads/",
@@ -45,7 +46,7 @@ Order.find({},(err,details)=>{
 
 router.post("/order",(req,res)=>{
 
-  const { lalitude,longitude,place,storeid,image,cancel} = req.body;
+  const {orderid,lalitude,longitude,place,storeid,image,cancel} = req.body;
   const newItem = new Order({ lalitude,longitude,place,storeid,image,status}); //image type is string and can be chandged  as per multer.
   newItem.save();
 });

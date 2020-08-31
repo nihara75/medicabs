@@ -5,9 +5,17 @@ const Medicine = require('mongoose').model('Medicine');
 
 
 const partnerSchema = new Schema({
-  partnerid:Integer,
-  order:Order,  //Order object
-  medicine:Medicine,
+  partnerid:Number,
+  order:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order',
+        required: true
+    }], //Order object
+  medicine:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Medicine',
+
+    }],
   status:{
           type:Boolean,
           required:true
