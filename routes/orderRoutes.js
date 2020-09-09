@@ -30,11 +30,12 @@ app.post('/photo',function(req,res){
 
 // Route to get all the active requirements for a particular shop
 router.get('/active', (req, res) => {
-
+	// shop id should be provided as a query param
 });
 
 // Route to get the details of all the closed requirements for a particular shop
 router.get('/closed', (req, res) => {
+	// shop id should be provided as a query param
 
 });
 
