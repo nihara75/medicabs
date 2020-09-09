@@ -3,11 +3,6 @@ const mongoose = require("mongoose");
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const fs = require("fs");
-const Schema = mongoose.Schema;
-const multer = require('multer');
-
-
 
 require('./models/User');
 require('./models/Medicine');
@@ -17,6 +12,7 @@ require('./services/passport');
 
 const keys = require('./config/keys');
 const authUserRoutes = require('./routes/authUserRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 mongoose.connect(keys.mongoURI, {
 		useNewUrlParser: true,
@@ -39,22 +35,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth/user', authUserRoutes);
+app.use('/api/order', orderRoutes);
 
 
-
-
-// const medistoreSchema={
-//   name:String,
-//   ph:String,
-//   email:String,
-//   location:String
-// }
-
-app.get("/", (req, res) => {
-	res.send('Hi There');
-});
-
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, (err) => {
     if(err) console.log(err);

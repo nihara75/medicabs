@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
+
     email: {
         type: String,
         required: true,
@@ -26,7 +27,8 @@ const UserSchema = new Schema({
         // unique: true
     },
     medicalInfo: String,
-    address: String
+    address: String,
+
 });
 
 UserSchema.pre('save', async function (next){

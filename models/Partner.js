@@ -1,31 +1,35 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const Order = require('mongoose').model('Order');
-const Medicine = require('mongoose').model('Medicine');
-
 
 const partnerSchema = new Schema({
-  partnerid:Number,
-  order:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
-        required: true
-    }], //Order object
-  medicine:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Medicine',
-
-    }],
-  status:{
-          type:Boolean,
-          required:true
-        },
-  closed:Boolean
-
+	
+	email: {
+		type: String,
+		required: true
+	},
+	password: {
+		type: String,
+		required: true
+	},
+	partnerName: {
+		type: String,
+		required: true
+	},
+	locality: {
+		type: String,
+		required: true
+	},
+	city: {
+		type: String,
+		required: true
+	},
+	closed: {
+		type: Boolean,
+		default: false
+	}
 });
 
-
-mongoose.model("Partner",partnerSchema);
+mongoose.model("Partner", partnerSchema);
 
 
 
