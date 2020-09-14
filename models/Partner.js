@@ -30,10 +30,3 @@ const partnerSchema = new Schema({
 });
 
 mongoose.model("Partner", partnerSchema);
-
-
-
-// register
-// closed orders
-// actve oderes
-// close order

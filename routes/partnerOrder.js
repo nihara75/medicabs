@@ -4,7 +4,7 @@ const multer = require('multer');
 const bodyparser = require('body-parser');
 
 router.get("/partner",(req,res)=>{
-  Partner.find({},(err,details){
+  Partner.find({},(err,details) => {
     if(!err){
       console.log(details);
     }else{

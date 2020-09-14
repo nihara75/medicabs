@@ -31,7 +31,7 @@ app.post('/photo',function(req,res){
 // Route to get all the active requirements for a particular shop
 router.get('/active', async (req, res) => {
 
-	const { shopId } = req.query;
+	const shopId = req.user.id;
 	try{
 		const activeOrders = await Order.find({ partner: shopId, active: true });
 
@@ -46,7 +46,9 @@ router.get('/active', async (req, res) => {
 // Route to get the details of all the closed requirements for a particular shop
 router.get('/closed',async (req, res) => {
 	// shop id should be provided as a query param
-  	const { shopId } = req.query;
+	  // const { shopId } = req.query;
+	const shopId = req.user.id;
+	  
 	try{
 		const closedOrders = await Order.find({ partner: shopId, active: false });
 		res.send({ success: true, closedOrders });
@@ -74,8 +76,10 @@ router.post('/', async (req, res) => {
 router.put('/cancel/:orderId', async (req, res) => {
 //const cancel=req.body.cancel;
 //const orderId=req.params.orderId;
+	const userId = req.user.id;
+	const { orderId } = req.params;
 	try{
-		await Order.updateOne({	_id: req.params.orderId }, { $set: { cancel: true, closed: true } });
+		await Order.updateOne({	_id: orderId, user: userId }, { $set: { cancel: true, closed: true } });
 
 		res.send({ success: true, message: 'Order cancelled succesfully' });
 	} catch(err){
@@ -85,8 +89,11 @@ router.put('/cancel/:orderId', async (req, res) => {
 
 // Route to close a particular order
 router.put('/close/:orderId',async (req, res) => {
+
+	const shopId = req.user.id;
+	const { orderId } = req.params;
 	try{
-		await Order.updateOne({ _id: req.params.orderId }, { $set: { actve: false } });
+		await Order.updateOne({ _id: orderId, partner: shopId }, { $set: { active: false } });
 		
 		res.send({ success: true, message: 'Order closed succesfully' });
 	} catch(err){
