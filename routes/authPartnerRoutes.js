@@ -5,24 +5,26 @@ const Partner = require('mongoose').model('Partner');
 require('../services/passport')(passport);
 const { unauthenticatedOnly } = require('../middlewares/authMiddleware');
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', 
+    unauthenticatedOnly, 
+    async (req, res) => {
+        const { email, password, name, locality, city  } = req.body;
 
-    const { email, password, name, locality, city  } = req.body;
+        try {
+            const partner = new Partner({ email, password, name, locality, city  });
+            await partner.save();
 
-    try {
-        const partner = new Partner({ email, password, name, locality, city  });
-        await partner.save();
-
-        res.json({success: true, message: 'Partner created succesfully'});
-    } catch(err) {
-        return res.status(422).send(err.message);
+            res.json({success: true, message: 'Partner created succesfully'});
+        } catch(err) {
+            return res.status(422).send(err.message);
+        }
     }
-});
+);
 
 router.post('/login', 
     unauthenticatedOnly, 
     passport.authenticate('partner-local', {
-        failureRedirect: '/auth/loginFailure'
+        failureRedirect: '/auth/partner/loginFailure'
     }),
     (req, res) => {
         return res.send({ success: true, partner: req.user });

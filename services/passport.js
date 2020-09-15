@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Partner = mongoose.model('Partner');
 
 module.exports = function(passport) {
 
@@ -35,7 +36,10 @@ module.exports = function(passport) {
                 if(!partner) return done(null, false);
 
                 partner.comparePassword(password, (err, isMatch) => {
-                    if(err) return done(err);
+                    if(err) {
+                        console.log(err);
+                        return done(err);
+                    }
                     if(!isMatch) return done(null, false, { success: false, message: 'Invalid email or password' });
 
                     return done(null, { id: partner._id, email: partner.email, name: partner.name, type: 'partner' });
@@ -50,12 +54,12 @@ module.exports = function(passport) {
         next(null, { id: user.id, type: user.type });
     });
       
-    passport.deserializeUser(async function(user, next) {
+    passport.deserializeUser(async function(object, next) {
 
-        switch(user.type) {
+        switch(object.type) {
             case 'client':
                 try {
-                    const user = await User.findById(id);
+                    const user = await User.findById(object.id);
                     if(!user) return next(null, false);;
         
                     next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
@@ -65,7 +69,7 @@ module.exports = function(passport) {
                 break;
             case 'partner':
                 try {
-                    const partner = await Partner.findById(id);
+                    const partner = await Partner.findById(object.id);
                     if(!partner) return next(null, false);;
         
                     next(null, { id: partner._id, email: partner.email, name: partner.name, phoneNo: partner.phoneNo });

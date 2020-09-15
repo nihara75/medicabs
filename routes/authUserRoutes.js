@@ -5,24 +5,26 @@ const User = require('mongoose').model('User');
 require('../services/passport')(passport);
 const { unauthenticatedOnly } = require('../middlewares/authMiddleware');
 
-router.post('/signup', async (req, res) => {
+router.post('/signup',
+    unauthenticatedOnly,
+    async (req, res) => {
+        const { email, password, name, phoneNo, address, medicalInfo } = req.body;
 
-    const { email, password, name, phoneNo, address, medicalInfo } = req.body;
+        try {
+            const user = new User({ email, password, name, phoneNo, address, medicalInfo });
+            await user.save();
 
-    try {
-        const user = new User({ email, password, name, phoneNo, address, medicalInfo });
-        await user.save();
-
-        res.json({success: true, message: 'User created succesfully'});
-    } catch(err) {
-        return res.status(422).send(err.message);
+            res.json({success: true, message: 'User created succesfully'});
+        } catch(err) {
+            return res.status(422).send(err.message);
+        }
     }
-});
+);
 
 router.post('/login', 
     unauthenticatedOnly, 
     passport.authenticate('user-local', {
-        failureRedirect: '/auth/loginFailure'
+        failureRedirect: '/auth/user/loginFailure'
     }),
     (req, res) => {
         return res.send({ success: true, user: req.user });
