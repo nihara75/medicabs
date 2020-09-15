@@ -2,6 +2,10 @@ const router = require('express').Router();
 const Order = require('mongoose').model('Order');
 const multer = require('multer');
 
+const { authenticatedOnly } = require('../middlewares/authMiddleware')
+
+router.use(authenticatedOnly);
+
 //Reference code.
 /*app.use(multer({ dest: './uploads/',
  rename: function (fieldname, filename) {
@@ -30,6 +34,7 @@ app.post('/photo',function(req,res){
 
 // Route to get all the active requirements for a particular shop
 router.get('/active', async (req, res) => {
+	console.log(req.user);
 
 	const shopId = req.user.id;
 	try{
@@ -44,7 +49,7 @@ router.get('/active', async (req, res) => {
 });
 
 // Route to get the details of all the closed requirements for a particular shop
-router.get('/closed',async (req, res) => {
+router.get('/closed', async (req, res) => {
 	// shop id should be provided as a query param
 	  // const { shopId } = req.query;
 	const shopId = req.user.id;
@@ -76,7 +81,7 @@ router.post('/', async (req, res) => {
 router.put('/cancel/:orderId', async (req, res) => {
 //const cancel=req.body.cancel;
 //const orderId=req.params.orderId;
-	const userId = req.user.id;
+	// const userId = req.user.id;
 	const { orderId } = req.params;
 	try{
 		await Order.updateOne({	_id: orderId, user: userId }, { $set: { cancel: true, closed: true } });

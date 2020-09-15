@@ -62,7 +62,7 @@ module.exports = function(passport) {
                     const user = await User.findById(object.id);
                     if(!user) return next(null, false);;
         
-                    next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
+                    next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo, type: 'user' });
                 } catch(err) {
                     next(err);
                 }
@@ -72,7 +72,7 @@ module.exports = function(passport) {
                     const partner = await Partner.findById(object.id);
                     if(!partner) return next(null, false);;
         
-                    next(null, { id: partner._id, email: partner.email, name: partner.name, phoneNo: partner.phoneNo });
+                    next(null, { id: partner._id, email: partner.email, name: partner.name, type: 'partner' });
                 } catch(err) {
                     next(err);
                 }
