@@ -4,7 +4,7 @@ const User = mongoose.model('User');
 
 module.exports = function(passport) {
 
-    passport.use(new LocalStrategy({
+    passport.use('user-local', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password'
         },
@@ -17,7 +17,28 @@ module.exports = function(passport) {
                     if(err) return done(err);
                     if(!isMatch) return done(null, false, { success: false, message: 'Invalid email or password' });
 
-                    return done(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
+                    return done(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo, type: 'client' });
+                });
+            } catch(err) {
+                return done(err);
+            }
+        }
+    ));
+
+    passport.use('partner-local', new LocalStrategy({
+            usernameField: 'email',
+            passwordField: 'password'
+        },
+        async function(username, password, done) {
+            try {
+                const partner = await Partner.findOne({ email: username });
+                if(!partner) return done(null, false);
+
+                partner.comparePassword(password, (err, isMatch) => {
+                    if(err) return done(err);
+                    if(!isMatch) return done(null, false, { success: false, message: 'Invalid email or password' });
+
+                    return done(null, { id: partner._id, email: partner.email, name: partner.name, type: 'partner' });
                 });
             } catch(err) {
                 return done(err);
@@ -26,18 +47,33 @@ module.exports = function(passport) {
     ));
 
     passport.serializeUser(function(user, next) {
-        next(null, user.id);
+        next(null, { id: user.id, type: user.type });
     });
       
-    passport.deserializeUser(async function(id, next) {
+    passport.deserializeUser(async function(user, next) {
 
-        try {
-            const user = await User.findById(id);
-            if(!user) return next(null, false);;
-
-            next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
-        } catch(err) {
-            next(err);
+        switch(user.type) {
+            case 'client':
+                try {
+                    const user = await User.findById(id);
+                    if(!user) return next(null, false);;
+        
+                    next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo });
+                } catch(err) {
+                    next(err);
+                }
+                break;
+            case 'partner':
+                try {
+                    const partner = await Partner.findById(id);
+                    if(!partner) return next(null, false);;
+        
+                    next(null, { id: partner._id, email: partner.email, name: partner.name, phoneNo: partner.phoneNo });
+                } catch(err) {
+                    next(err);
+                }
+                break;
         }
+        
     });
 }

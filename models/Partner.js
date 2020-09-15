@@ -11,7 +11,7 @@ const partnerSchema = new Schema({
 		type: String,
 		required: true
 	},
-	partnerName: {
+	name: {
 		type: String,
 		required: true
 	},
