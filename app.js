@@ -8,10 +8,10 @@ require('./models/User');
 require('./models/Medicine');
 require('./models/Order');
 require('./models/Partner');
-require('./services/passport');
 
 const keys = require('./config/keys');
 const authUserRoutes = require('./routes/authUserRoutes');
+const authPartnerRoutes = require('./routes/authPartnerRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 
 mongoose.connect(keys.mongoURI, {
@@ -25,7 +25,7 @@ mongoose.connect(keys.mongoURI, {
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
     secret: keys.sessionSecret,
@@ -35,6 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth/user', authUserRoutes);
+app.use('/auth/partner', authPartnerRoutes);
 app.use('/api/order', orderRoutes);
 
 

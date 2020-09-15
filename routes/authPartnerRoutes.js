@@ -1,19 +1,19 @@
 const router = require('express').Router();
 const passport = require('passport');
-const User = require('mongoose').model('User');
+const Partner = require('mongoose').model('Partner');
 
 require('../services/passport')(passport);
 const { unauthenticatedOnly } = require('../middlewares/authMiddleware');
 
 router.post('/signup', async (req, res) => {
 
-    const { email, password, name, phoneNo, address, medicalInfo } = req.body;
+    const { email, password, name, locality, city  } = req.body;
 
     try {
-        const user = new User({ email, password, name, phoneNo, address, medicalInfo });
-        await user.save();
+        const partner = new Partner({ email, password, name, locality, city  });
+        await partner.save();
 
-        res.json({success: true, message: 'User created succesfully'});
+        res.json({success: true, message: 'Partner created succesfully'});
     } catch(err) {
         return res.status(422).send(err.message);
     }
@@ -21,11 +21,11 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', 
     unauthenticatedOnly, 
-    passport.authenticate('user-local', {
+    passport.authenticate('partner-local', {
         failureRedirect: '/auth/loginFailure'
     }),
     (req, res) => {
-        return res.send({ success: true, user: req.user });
+        return res.send({ success: true, partner: req.user });
     }
 );
 
