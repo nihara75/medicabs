@@ -5,27 +5,23 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
+const storage = multer.diskStorage({
+	destination: function(req, file, cb) {
+		fs.mkdir('./uploads/', (err) => {
+			cb(null, './uploads/');
+		});
+	},
+	filename: function(req, file, cb) {
+		cb(null, new Date().toISOString() + file.originalname);
+	}
+});
 
-const app = express();
+const upload = multer({ storage });
 
 const { authenticatedOnly } = require('../middlewares/authMiddleware')
 
+// Middlewares
 router.use(authenticatedOnly);
-
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    fs.mkdir('./uploads/',(err)=>{
-       cb(null, './uploads/');
-    });
-  },
-  filename: function(req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
-  }
-});
-
-const upload = multer({ storage: storage });
-
-
 
 
 // Route to get all the active requirements for a particular shop

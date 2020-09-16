@@ -42,7 +42,7 @@ app.use('/auth/partner', authPartnerRoutes);
 app.use('/api/order', orderRoutes);
 
 
-const PORT = process.env.PORT || 13000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, (err) => {
     if(err) console.log(err);
