@@ -34,12 +34,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/uploads', express.static('uploads'));
+app.use(express.static(__dirname));
+
 app.use('/auth/user', authUserRoutes);
 app.use('/auth/partner', authPartnerRoutes);
 app.use('/api/order', orderRoutes);
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 13000;
 
 app.listen(PORT, (err) => {
     if(err) console.log(err);

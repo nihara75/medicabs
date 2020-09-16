@@ -30,9 +30,12 @@ const orderSchema= new Schema({
 	active: {
 		type: Boolean,
 		default: true
-	}
-	
-	// image:String,        // prescription storing
+	},
+
+	image:{
+        data: Buffer,
+        contentType: String
+    },        // prescription storing
 
 });
 
