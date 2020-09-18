@@ -12,7 +12,7 @@ const orderSchema= new Schema({
 	partner: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Partner',
-		required: true
+		//required: true
 	},
 	// The address field may be split into multiple fields
 	deliveryAddress: {

@@ -14,8 +14,8 @@ router.use(authenticatedOnly);
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    fs.mkdir('./uploads/',(err)=>{
-       cb(null, './uploads/');
+    fs.mkdir('./routes/uploads/',(err)=>{
+       cb(null, './routes/uploads/');
     });
   },
   filename: function(req, file, cb) {
@@ -66,11 +66,12 @@ router.post('/',upload.single('image'), async (req, res) => {
         user:req.body.id,
         partner:req.body.part,
         deliveryAddress:req.body.address,
-        img: {
-            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+        image: {
+            data: fs.readFileSync(path.join( __dirname+'/uploads/' + req.file.filename)),
             contentType: 'image/png'
         }
     }
+
   await  Order.create(obj, (err, item) => {
         if (err) {
             console.log(err);
