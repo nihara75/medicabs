@@ -27,7 +27,7 @@ router.use(authenticatedOnly);
 
 // Route to get all the active requirements for a particular shop
 router.get('/active', async (req, res) => {
-	console.log(req.user);
+	// console.log(req.user);
 
 	const shopId = req.user.id;
 	try{
@@ -56,28 +56,29 @@ router.get('/closed', async (req, res) => {
 });
 
 // Route to place a new order
-router.post('/',upload.single('image'), async (req, res) => {
-  const obj = {
-        user:req.body.id,
-        partner:req.body.part,
-        deliveryAddress:req.body.address,
-        image: {
-            data: fs.readFileSync(path.join( __dirname+'/uploads/' + req.file.filename)),
-            contentType: 'image/png'
-        }
-    }
+router.post('/', upload.single('image'), async (req, res) => {
+		
+	const { parnter, address } = req.body;
+	
+	const obj = {
+		user: req.user.id,
+		partner: parnter,
+		deliveryAddress: address,
+		image: {
+			data: fs.readFileSync(path.join( __dirname + '/uploads/' + req.file.filename)),
+			contentType: 'image/png'
+		}
+	}
 
-  await  Order.create(obj, (err, item) => {
-        if (err) {
-            console.log(err);
-        }
-        else {
+	try {
+		const item = await Order.create(obj);
+		item.save();
 
-            res.send({success:true,item});
-        }
-    });
-
-  });
+		res.send({ success: true, message: 'Order placed succefully', item });
+	} catch(err) {
+		return res.send({ success: false, message: err.message });
+	}
+});
 
 // Route to cancel a particular order by user
 router.put('/cancel/:orderId', async (req, res) => {
