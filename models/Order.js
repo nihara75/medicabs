@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 
-const orderSchema= new Schema({
+const OrderSchema = new Schema({
 
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -39,7 +39,7 @@ const orderSchema= new Schema({
 
 });
 
-mongoose.model("Order",orderSchema);
+mongoose.model("Order", OrderSchema);
 
 // place order
 // cancel

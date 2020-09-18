@@ -54,22 +54,22 @@ module.exports = function(passport) {
         next(null, { id: user.id, type: user.type });
     });
       
-    passport.deserializeUser(async function(object, next) {
+    passport.deserializeUser(async function(user, next) {
 
-        switch(object.type) {
+        switch(user.type) {
             case 'client':
                 try {
-                    const user = await User.findById(object.id);
-                    if(!user) return next(null, false);;
+                    const client = await User.findById(user.id);
+                    if(!client) return next(null, false);;
         
-                    next(null, { id: user._id, email: user.email, name: user.name, phoneNo: user.phoneNo, type: 'user' });
+                    next(null, { id: client._id, email: client.email, name: client.name, phoneNo: client.phoneNo, type: 'client' });
                 } catch(err) {
                     next(err);
                 }
                 break;
             case 'partner':
                 try {
-                    const partner = await Partner.findById(object.id);
+                    const partner = await Partner.findById(user.id);
                     if(!partner) return next(null, false);;
         
                     next(null, { id: partner._id, email: partner.email, name: partner.name, type: 'partner' });

@@ -36,7 +36,7 @@ router.get('/loginFailure', (req, res) => {
 });
 
 router.get('/currentUser', (req, res) => {
-    res.send(req.user);
+    return req.user.type === 'partner' ? res.send(req.user) : res.send(null);
 });
 
 router.get('/logout', (req, res) => {

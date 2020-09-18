@@ -5,14 +5,8 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
-
-const app = express();
-
-const { authenticatedOnly } = require('../middlewares/authMiddleware')
-
-router.use(authenticatedOnly);
-
 const storage = multer.diskStorage({
+
   destination: function(req, file, cb) {
     fs.mkdir('./routes/uploads/',(err)=>{
        cb(null, './routes/uploads/');
@@ -23,9 +17,12 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
+const { authenticatedOnly } = require('../middlewares/authMiddleware')
 
+// Middlewares
+router.use(authenticatedOnly);
 
 
 // Route to get all the active requirements for a particular shop
@@ -41,13 +38,11 @@ router.get('/active', async (req, res) => {
 		res.send({ success: false, message: err.message });
 	}
 
-	// shop id should be provided as a query param
 });
 
 // Route to get the details of all the closed requirements for a particular shop
 router.get('/closed', async (req, res) => {
-	// shop id should be provided as a query param
-	  // const { shopId } = req.query;
+
 	const shopId = req.user.id;
 
 	try{
@@ -81,13 +76,13 @@ router.post('/',upload.single('image'), async (req, res) => {
             res.send({success:true,item});
         }
     });
-});
+
+  });
 
 // Route to cancel a particular order by user
 router.put('/cancel/:orderId', async (req, res) => {
-//const cancel=req.body.cancel;
-//const orderId=req.params.orderId;
-	// const userId = req.user.id;
+
+	const userId = req.user.id;
 	const { orderId } = req.params;
 	try{
 		await Order.updateOne({	_id: orderId, user: userId }, { $set: { cancel: true, closed: true } });
