@@ -42,7 +42,6 @@ app.use('/auth/partner', authPartnerRoutes);
 app.use('/api/order', orderRoutes);
 
 
-
 const PORT = process.env.PORT || 5000;
 
 
